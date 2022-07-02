@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const { default: mongoose } = require('mongoose');
+require('./modules/auth');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -42,7 +43,7 @@ app.use((err, req, res, next) => {
 
   // render the error page
   res.status(err.status || 500);
-  res.send('erroasdasdr');
+  res.send('error');
 });
 
 module.exports = app;

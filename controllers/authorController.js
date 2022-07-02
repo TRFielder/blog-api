@@ -1,6 +1,8 @@
 const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const Author = require('../models/author');
-
 require('dotenv').config();
 
 exports.author_detail_get = function getAuthor(req, res) {
@@ -8,8 +10,14 @@ exports.author_detail_get = function getAuthor(req, res) {
     if (err) {
       res.json(err);
     }
-    // Successfull, so send the response JSON
-    res.json(author);
+    // Successfull, so send the response JSON (without the user's hashed password)
+    const response = {
+      username: author.username,
+      first_name: author.first_name,
+      last_name: author.last_name,
+    };
+
+    res.json(response);
   });
 };
 
@@ -31,23 +39,28 @@ exports.createAuthor = [
       return res.json({ errors: errors.array() });
     }
     // Create the new author and add them to the database
-    const author = new Author({
-      username: req.body.username,
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      password: req.body.password,
-    });
-    author.save((err) => {
+    bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
       if (err) {
         return next(err);
       }
+      const author = new Author({
+        username: req.body.username,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        password: hashedPassword,
+      });
+      author.save((err) => {
+        if (err) {
+          return next(err);
+        }
+      });
+      // Send response payload containing the created author
+      return res.json(author);
     });
-    // Send response payload containing the created author
-    return res.json(author);
   },
 ];
 
-exports.deleteAuthor = function (req, res, next) {
+exports.deleteAuthor = function deleteAuthor(req, res, next) {
   Author.findByIdAndRemove(req.params.id, (err, result) => {
     if (err) {
       return next(err);
@@ -59,4 +72,27 @@ exports.deleteAuthor = function (req, res, next) {
     // Successfully deleted, confirm in response
     return res.send(`Removed user: ${result}\n`);
   });
+};
+
+exports.authorLogin = (req, res) => {
+  passport.authenticate('local', { session: false }, (err, author) => {
+    if (err || !author) {
+      return res.status(401).json({
+        message: 'Incorrect username or password',
+        author,
+      });
+    }
+    jwt.sign(
+      { _id: author._id, username: author.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1 day' },
+      (err, token) => {
+        if (err) return res.status(400).json(err);
+        res.json({
+          token,
+          author: { _id: author._id, username: author.username },
+        });
+      }
+    );
+  })(req, res);
 };
