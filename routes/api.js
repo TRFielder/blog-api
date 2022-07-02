@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const checkToken = require('../modules/token');
+// const checkToken = require('../modules/token');
 
 const authorController = require('../controllers/authorController');
 const articleController = require('../controllers/articleController');
@@ -20,12 +20,12 @@ router.post('/author', authorController.createAuthor);
 router.get('/author/:id', authorController.author_detail_get);
 
 // PUT request to update an author
-router.put('/author/:id', checkToken, (req, res) => {
+router.put('/author/:id', (req, res) => {
   res.send('NOT IMPLEMENTED: Author PUT');
 });
 
 // DELETE request to remove an author
-router.delete('/author/:id', checkToken, authorController.deleteAuthor);
+router.delete('/author/:id', authorController.deleteAuthor);
 
 // POST request to log in as an author
 router.post('/login', authorController.authorLogin);
@@ -33,30 +33,24 @@ router.post('/login', authorController.authorLogin);
 // ------- ARTICLE actions -------- //
 
 // POST request to create a new article
-router.post('/article', checkToken, (req, res) => {
-  res.send('NOT IMPLEMENTED: Article GET');
-});
+router.post('/article', articleController.createArticle);
 
 // GET request for a single article's details
 router.get('/article/:id', articleController.article_get);
 
 // PUT request to update an article
-router.put('/article/:id', checkToken, (req, res) => {
+router.put('/article/:id', (req, res) => {
   res.send('NOT IMPLEMENTED: Article update PUT');
 });
 
 // DELETE request to remove an article
-router.delete('/article/:id', checkToken, (req, res) => {
-  res.send('NOT IMPLEMENTED: Article DELETE');
-});
+router.delete('/article/:id', articleController.deleteArticle);
 
 // PUT request to publish an article
-router.put('/article/:id/publish', checkToken, (req, res) => {
-  res.send('NOT IMPLEMENTED: Article Publish PUT');
-});
+router.put('/article/:id/publish', articleController.publishArticle);
 
 // PUT request to unpublish an article
-router.put('/article/:id/unpublish', checkToken, (req, res) => {
+router.put('/article/:id/unpublish', (req, res) => {
   res.send('NOT IMPLEMENTED: Article unpublish PUT');
 });
 

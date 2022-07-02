@@ -19,6 +19,7 @@ exports.createArticle = [
   body('text').trim().isLength({ min: 140 }),
 
   (req, res, next) => {
+    console.log(req);
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -27,9 +28,10 @@ exports.createArticle = [
     // Data is valid, create the new article and save to database
     const article = new Article({
       title: req.body.title,
-      author: req.authData._id,
+      author: req.body.author, // Change to req.authData._id when building CMS
       text: req.body.text,
     });
+    console.log(article);
     article.save((err) => {
       if (err) {
         return next(err);
@@ -39,3 +41,23 @@ exports.createArticle = [
     return res.json(article);
   },
 ];
+
+exports.deleteArticle = (req, res, next) => {
+  Article.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Successfully deleted, send confirmation
+    return res.send(`Deleted article with ID: ${req.params.id}`);
+  });
+};
+
+exports.publishArticle = (req, res, next) => {
+  Article.findByIdAndUpdate(req.params.id, { published: true }, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Successfully updated, send confirmation
+    return res.send(`Published article with ID: ${req.params.id}`);
+  });
+};
