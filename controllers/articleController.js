@@ -61,3 +61,13 @@ exports.publishArticle = (req, res, next) => {
     return res.send(`Published article with ID: ${req.params.id}`);
   });
 };
+
+exports.unpublishArticle = (req, res, next) => {
+  Article.findByIdAndUpdate(req.params.id, { published: false }, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Successfully updated, send confirmation
+    return res.send(`Unpublished article with ID: ${req.params.id}`);
+  });
+};

@@ -50,8 +50,6 @@ router.delete('/article/:id', articleController.deleteArticle);
 router.put('/article/:id/publish', articleController.publishArticle);
 
 // PUT request to unpublish an article
-router.put('/article/:id/unpublish', (req, res) => {
-  res.send('NOT IMPLEMENTED: Article unpublish PUT');
-});
+router.put('/article/:id/unpublish', articleController.unpublishArticle);
 
 module.exports = router;
