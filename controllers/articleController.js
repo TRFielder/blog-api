@@ -52,6 +52,22 @@ exports.deleteArticle = (req, res, next) => {
   });
 };
 
+exports.updateArticle = (req, res, next) => {
+  Article.findByIdAndUpdate(
+    req.params.id,
+    {
+      title: req.body.title,
+      text: req.body.text,
+    },
+    (err) => {
+      if (err) {
+        return next(err);
+      } // Successfully updated. send confirmation
+      return res.send(`Updated article with ID: ${req.params.id}`);
+    }
+  );
+};
+
 exports.publishArticle = (req, res, next) => {
   Article.findByIdAndUpdate(req.params.id, { published: true }, (err) => {
     if (err) {

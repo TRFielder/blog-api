@@ -39,9 +39,7 @@ router.post('/article', articleController.createArticle);
 router.get('/article/:id', articleController.article_get);
 
 // PUT request to update an article
-router.put('/article/:id', (req, res) => {
-  res.send('NOT IMPLEMENTED: Article update PUT');
-});
+router.put('/article/:id', articleController.updateArticle);
 
 // DELETE request to remove an article
 router.delete('/article/:id', articleController.deleteArticle);
