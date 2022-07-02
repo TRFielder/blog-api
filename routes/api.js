@@ -25,7 +25,7 @@ router.put('/author/:id', checkToken, (req, res) => {
 });
 
 // DELETE request to remove an author
-router.delete('/author/:id', authorController.deleteAuthor);
+router.delete('/author/:id', checkToken, authorController.deleteAuthor);
 
 // POST request to log in as an author
 router.post('/login', authorController.authorLogin);
@@ -33,7 +33,7 @@ router.post('/login', authorController.authorLogin);
 // ------- ARTICLE actions -------- //
 
 // POST request to create a new article
-router.post('/article', (req, res) => {
+router.post('/article', checkToken, (req, res) => {
   res.send('NOT IMPLEMENTED: Article GET');
 });
 
@@ -41,22 +41,22 @@ router.post('/article', (req, res) => {
 router.get('/article/:id', articleController.article_get);
 
 // PUT request to update an article
-router.put('/article/:id', (req, res) => {
+router.put('/article/:id', checkToken, (req, res) => {
   res.send('NOT IMPLEMENTED: Article update PUT');
 });
 
 // DELETE request to remove an article
-router.delete('/article/:id', (req, res) => {
+router.delete('/article/:id', checkToken, (req, res) => {
   res.send('NOT IMPLEMENTED: Article DELETE');
 });
 
 // PUT request to publish an article
-router.put('/article/:id/publish', (req, res) => {
+router.put('/article/:id/publish', checkToken, (req, res) => {
   res.send('NOT IMPLEMENTED: Article Publish PUT');
 });
 
 // PUT request to unpublish an article
-router.put('/article/:id/unpublish', (req, res) => {
+router.put('/article/:id/unpublish', checkToken, (req, res) => {
   res.send('NOT IMPLEMENTED: Article unpublish PUT');
 });
 
