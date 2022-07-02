@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 require('./comment');
 require('./author');
+const { DateTime } = require('luxon');
 
 const { Schema } = mongoose;
 
@@ -13,6 +14,8 @@ const ArticleSchema = new Schema({
   published: { type: Boolean, default: false },
 });
 
-const Article = mongoose.model('Article', ArticleSchema);
+ArticleSchema.virtual('date_formatted').get(() => {
+  DateTime.fromJSDate(this.date).toLocaleString(DateTime.DATETIME_FULL);
+});
 
-module.exports = Article;
+module.exports = mongoose.model('Article', ArticleSchema);
