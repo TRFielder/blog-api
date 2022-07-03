@@ -25,6 +25,7 @@ const ProjectSchema = new Schema({
   description: { type: String, required: true },
   repository: { type: String, required: true },
   live_demo: { type: String, required: true },
+  published: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('Project', ProjectSchema);
