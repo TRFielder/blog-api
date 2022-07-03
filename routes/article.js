@@ -7,6 +7,9 @@ const articleController = require('../controllers/articleController');
 
 // ------- ARTICLE actions -------- //
 
+// GET request for all articles
+router.get('/', articleController.listArticle);
+
 // POST request to create a new article
 router.post('/', articleController.createArticle);
 

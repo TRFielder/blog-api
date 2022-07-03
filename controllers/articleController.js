@@ -1,6 +1,19 @@
 const { body, validationResult } = require('express-validator');
 const Article = require('../models/article');
 
+exports.listArticle = (req, res, next) => {
+  Article.find()
+    .populate('author', { username: 1, first_name: 1, last_name: 1 })
+    .sort([['date', 'descending']])
+    .exec((err, allArticles) => {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so send results
+      res.json({ allArticles });
+    });
+};
+
 exports.article_get = (req, res) => {
   Article.findById(req.params.id).exec((err, article) => {
     if (err) {
