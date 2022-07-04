@@ -15,16 +15,18 @@ exports.listArticle = (req, res, next) => {
 };
 
 exports.article_get = (req, res) => {
-  Article.findById(req.params.id).exec((err, article) => {
-    if (err) {
-      res.json(err);
-    }
-    if (article === null) {
-      return res.send('Article not found');
-    }
-    // Successful, so send the response JSON
-    return res.json(article);
-  });
+  Article.findById(req.params.id)
+    .populate('author', { username: 1, first_name: 1, last_name: 1 })
+    .exec((err, article) => {
+      if (err) {
+        res.json(err);
+      }
+      if (article === null) {
+        return res.send('Article not found');
+      }
+      // Successful, so send the response JSON
+      return res.json(article);
+    });
 };
 
 exports.createArticle = [
