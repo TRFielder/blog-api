@@ -10,7 +10,7 @@ exports.listArticle = (req, res, next) => {
         return next(err);
       }
       // Successful, so send results
-      res.json({ allArticles });
+      res.json(allArticles);
     });
 };
 
